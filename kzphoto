@@ -1,0 +1,67 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from __future__ import division
+import sys
+import time
+import karotz as kz
+import signal
+import random
+import datetime
+t0 = datetime.datetime.now()
+
+##################################################
+############# PARAMS #############################
+##################################################
+
+RUN_FOR     = 590   # ~10 min - 10s - so we assume we'll cron it every 10min
+PHOTO_CYCLE = 5     # every 5s a photo will be taken, don't put less than 2s.
+settings = {}
+settings['installid']   = "69183a8c-90db-4eb1-b02a-441aba820446"
+settings['apikey']      = "1f224ded-ab7e-4d67-8589-819be67e3df9"
+settings['secret']      = "6836a483-67c1-4d44-bcae-f0ab7ab545f7"
+
+
+##################################################
+
+k = kz.Karotz(settings=settings)
+
+url = sys.argv[1]
+
+#periods = [i*1000 for i in range(1, 10)]
+k.ears.move(5 ,12)
+k.led.light()
+
+message = "Vidéo surveillance enclenchée"
+k.tts.speak(message, lang=kz.FRENCH)
+
+
+def signal_handler(signal, frame):
+    print 'You pressed Ctrl+C!'
+    k.stop()
+    sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
+
+
+while True:
+
+    try:
+        k.webcam.photo(url)
+        k.led.light()
+        # photo is taken, light put back to red, so we wait...
+        time.sleep(PHOTO_CYCLE)
+
+        delta_t = datetime.datetime.now() - t0 
+        print "delta: %s" % delta_t
+        if delta_t.seconds > RUN_FOR:
+            print "Finishing, I've been running for %s s." % delta_t
+            break
+
+    except KeyboardInterrupt:
+        k.stop()
+        raise
+
+    except Exception:
+        #pass
+        k.stop()
+        raise
+k.stop()
