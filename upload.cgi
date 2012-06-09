@@ -83,7 +83,7 @@ def sendmail(subject,preamble,me,emailto,image):
     msgAlternative.attach(msgText)
 
     # We reference the image in the IMG SRC attribute by the ID we give it below
-    msgText = MIMEText('<b>HOME INTRUSION !</b> <br><img src="cid:image1"><br><a href="http://ks.baqs.net/cgi/karotz/snapshotlist.cgi">Full Picture List</a>', 'html')
+    msgText = MIMEText('<b>HOME INTRUSION !</b> <br><img src="cid:image1"><br><a href="<link here>">Full Picture List</a>', 'html')
     msgAlternative.attach(msgText)
 
 
@@ -105,14 +105,13 @@ def sendmail(subject,preamble,me,emailto,image):
     s.quit()
 
 
-
-
-
+# tests
 #	diff = comparepic(Image.open(STORAGE_DIR+"/last.jpg"),Image.open(STORAGE_DIR  + 'snapshot_2012_06_09_00_11_50.jpg') )
 #	logger.info('diff:'+str(diff))
 #	
-#   sendmail('HOME INTRUSION','find picture attach','karotz@baqs.net','pierre@ourdouille.fr', STORAGE_DIR  + 'last.jpg')
+#   sendmail('HOME INTRUSION','find picture attach','karotz@ho.me','me@me.com', STORAGE_DIR  + 'last.jpg')
 #   logger.info('sendmail ')
+# tests
 
 
 form        = cgi.FieldStorage()
@@ -128,13 +127,12 @@ if form.has_key('sendfile'):
 
         # compare picture with last picture
         diff = comparepic(STORAGE_DIR+"/last.jpg",STORAGE_DIR  + name)
-        #diff = 10.1
 
         # if change, send an alert email
         if diff > 50:
             # send email
             logger.warning('HOME INTRUSION !')
-            sendmail('HOME INTRUSION','find picture attach','karotz@baqs.net','pierre@ourdouille.fr', STORAGE_DIR  + name)
+            sendmail('HOME INTRUSION','find picture attach','karotz@home.com','me@me.com', STORAGE_DIR  + name)
             logger.info("/bin/cp "+STORAGE_DIR+name+" "+STORAGE_DIR+"/last.jpg")
             os.system("/bin/cp "+STORAGE_DIR+name+" "+STORAGE_DIR+"/last.jpg")
         else:
@@ -146,24 +144,6 @@ if form.has_key('sendfile'):
             logger.info("/bin/mv "+STORAGE_DIR+name+" "+STORAGE_DIR+"/last.jpg")
             os.system("/bin/mv "+STORAGE_DIR+name+" "+STORAGE_DIR+"/last.jpg")
 
-      # # take photo (will call me back :) )
-      # settings = {}
-      # settings['apikey']      = "1f224ded-ab7e-4d67-8589-819be67e3df9"
-      # settings['installid']   = "f3376ae5-0d44-4370-bce6-391c0c004d95"
-      # settings['secret']      = "6836a483-67c1-4d44-bcae-f0ab7ab545f7"
-
-
-      # k = kz.Karotz(settings=settings)
-
-      # #k = kz.Karotz()
-      # request_uri = os.environ.get('REQUEST_URI', '')
-      # server_name = os.environ.get('SERVER_NAME', '')
-      # url = 'http'+server_name+request_uri
-      # k.webcam.photo(url)
-      # k.stop()
-
-      # wait 30s
-      # time.sleep(5)
     else:
         logger.error('Derp... could you try that again please?')
         message = "Derp... could you try that again please?"
@@ -172,8 +152,8 @@ else:
     data = sys.stdin.read()
     logger.info(data)
 
-    logger.error('Please provide a sendfile')
     message = "Please provide a sendfile"
+    logger.error(message)
 
 print """\
 Content-Type: text/html\n
