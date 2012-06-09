@@ -16,9 +16,9 @@ t0 = datetime.datetime.now()
 RUN_FOR     = 590   # ~10 min - 10s - so we assume we'll cron it every 10min
 PHOTO_CYCLE = 5     # every 5s a photo will be taken, don't put less than 2s.
 settings = {}
-settings['installid']   = "69183a8c-90db-4eb1-b02a-441aba820446"
-settings['apikey']      = "1f224ded-ab7e-4d67-8589-819be67e3df9"
-settings['secret']      = "6836a483-67c1-4d44-bcae-f0ab7ab545f7"
+settings['installid']   = ""
+settings['apikey']      = ""
+settings['secret']      = ""
 
 
 ##################################################
